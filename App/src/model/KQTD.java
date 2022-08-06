@@ -13,14 +13,15 @@ import java.util.Date;
  */
 public class KQTD {
 
-    int mavong, matran, matrancu, madoi1, madoi2, sobanthang1, sobanthang2;
+    int makqtd, mavong, matran, matrancu, madoi1, madoi2, sobanthang1, sobanthang2;
     String tenvong, tentran, tendoi1, tendoi2, SVD;
     Date thoigianthidau;
 
     public KQTD() {
     }
 
-    public KQTD(int mavong, int matran, int matrancu, int madoi1, int madoi2, int sobanthang1, int sobanthang2, String tenvong, String tentran, String tendoi1, String tendoi2, String SVD, Date thoigianthidau) {
+    public KQTD(int makqtd, int mavong, int matran, int matrancu, int madoi1, int madoi2, int sobanthang1, int sobanthang2, String tenvong, String tentran, String tendoi1, String tendoi2, String SVD, Date thoigianthidau) {
+        this.makqtd = makqtd;
         this.mavong = mavong;
         this.matran = matran;
         this.matrancu = matrancu;
@@ -36,7 +37,8 @@ public class KQTD {
         this.thoigianthidau = thoigianthidau;
     }
 
-    public KQTD(int mavong, int matran, int madoi1, int madoi2, int sobanthang1, int sobanthang2, String tenvong, String tentran, String tendoi1, String tendoi2, String SVD, Date thoigianthidau) {
+    public KQTD(int makqtd, int mavong, int matran, int madoi1, int madoi2, int sobanthang1, int sobanthang2, String tenvong, String tentran, String tendoi1, String tendoi2, String SVD, Date thoigianthidau) {
+        this.makqtd = makqtd;
         this.mavong = mavong;
         this.matran = matran;
         this.madoi1 = madoi1;
@@ -51,35 +53,9 @@ public class KQTD {
         this.thoigianthidau = thoigianthidau;
     }
 
-    public KQTD(int matran, int madoi1, int madoi2, int sobanthang1, int sobanthang2, String tenvong, String tentran, String tendoi1, String tendoi2, String SVD, Date thoigianthidau) {
+    public KQTD(int makqtd, int matran, int madoi1, int madoi2, int sobanthang1, int sobanthang2, String SVD, Date thoigianthidau) {
+        this.makqtd = makqtd;
         this.matran = matran;
-        this.madoi1 = madoi1;
-        this.madoi2 = madoi2;
-        this.sobanthang1 = sobanthang1;
-        this.sobanthang2 = sobanthang2;
-        this.tenvong = tenvong;
-        this.tentran = tentran;
-        this.tendoi1 = tendoi1;
-        this.tendoi2 = tendoi2;
-        this.SVD = SVD;
-        this.thoigianthidau = thoigianthidau;
-    }
-
-    public KQTD(int matran, int madoi1, int madoi2, int sobanthang1, int sobanthang2, String tendoi1, String tendoi2, String SVD, Date thoigianthidau) {
-        this.matran = matran;
-        this.madoi1 = madoi1;
-        this.madoi2 = madoi2;
-        this.sobanthang1 = sobanthang1;
-        this.sobanthang2 = sobanthang2;
-        this.tendoi1 = tendoi1;
-        this.tendoi2 = tendoi2;
-        this.SVD = SVD;
-        this.thoigianthidau = thoigianthidau;
-    }
-
-    public KQTD(int matran, int matrancu, int madoi1, int madoi2, int sobanthang1, int sobanthang2, String SVD, Date thoigianthidau) {
-        this.matran = matran;
-        this.matrancu = matrancu;
         this.madoi1 = madoi1;
         this.madoi2 = madoi2;
         this.sobanthang1 = sobanthang1;
@@ -87,7 +63,7 @@ public class KQTD {
         this.SVD = SVD;
         this.thoigianthidau = thoigianthidau;
     }
-
+    
     public KQTD(int matran, int madoi1, int madoi2, int sobanthang1, int sobanthang2, String SVD, Date thoigianthidau) {
         this.matran = matran;
         this.madoi1 = madoi1;
@@ -98,13 +74,12 @@ public class KQTD {
         this.thoigianthidau = thoigianthidau;
     }
 
-    public KQTD(int matran, String tentran) {
-        this.matran = matran;
-        this.tentran = tentran;
+    public int getMakqtd() {
+        return makqtd;
     }
 
-    public KQTD(String tenvong) {
-        this.tenvong = tenvong;
+    public void setMakqtd(int makqtd) {
+        this.makqtd = makqtd;
     }
 
     public int getMavong() {
@@ -211,4 +186,5 @@ public class KQTD {
         this.thoigianthidau = thoigianthidau;
     }
 
+    
 }

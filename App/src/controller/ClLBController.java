@@ -151,7 +151,6 @@ public class ClLBController {
         PreparedStatement statement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
@@ -250,7 +249,6 @@ public class ClLBController {
         PreparedStatement statement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query

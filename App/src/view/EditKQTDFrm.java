@@ -5,19 +5,16 @@
  */
 package view;
 
-import controller.CauThuConTroller;
 import controller.ClLBController;
 import controller.KQTDcontroller;
-import java.text.ParseException;
+import controller.TDController;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.CLB;
-import model.CauThu;
 import model.KQTD;
+import model.TD;
 
 /**
  *
@@ -29,7 +26,7 @@ public class EditKQTDFrm extends javax.swing.JDialog {
      * Creates new form EditCauThuFrm
      */
     
-    int matrancu = 0;
+    int makqtd = 0;
     List<CLB> ClbList;
     List<KQTD> KQTDList;
     HomeFrm homeFrm;
@@ -38,6 +35,7 @@ public class EditKQTDFrm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle("Cập nhật kết quả trận đấu");
     }
 
     /**
@@ -96,7 +94,7 @@ public class EditKQTDFrm extends javax.swing.JDialog {
 
         jlbThoiGian.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jlbThoiGian.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlbThoiGian.setText("THỜI GIAN THI ĐẤU (YYYY/MM/DD)");
+        jlbThoiGian.setText("THỜI GIAN THI ĐẤU (DD/MM/YYYY)");
 
         jlbSVD.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jlbSVD.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -238,20 +236,28 @@ public class EditKQTDFrm extends javax.swing.JDialog {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        ClbList = ClLBController.findAll();
-        KQTDList = KQTDcontroller.findAllTD();
+        List<CLB> CLBLst = ClLBController.findAll();
+        List<TD> TDList = TDController.findAllTD();
         
         boolean isOK = true;
-        int matran = 0, madoi1 = 0, madoi2 = 0, banthang1 = 0, banthang2 = 0;
+        boolean checkdoi = false;
+        boolean checktran = false;
+        int matran = 0, tentran = 0, madoi1 = 0, madoi2 = 0, banthang1 = 0, banthang2 = 0;
         Date thoigian = null;
-        String tentran = null, tendoi1 = null, tendoi2 = null, SVD = null;
+        String tendoi1 = null, tendoi2 = null, SVD = null;
 
         if (cbTranDau.getSelectedIndex() >= 0) {
-            tentran = cbTranDau.getSelectedItem().toString();
-            for(KQTD kqtd : KQTDList) {
-                if(kqtd.getTentran().equals(tentran)) {
-                    matran = kqtd.getMatran();
+            tentran = Integer.valueOf(cbTranDau.getSelectedItem().toString());
+            for(TD td : TDList) {
+                if (td.getTentran() == tentran && KQTDcontroller.checkTentran(tentran)) {
+                    matran = td.getMatran();
+                    checktran = true;
                 }
+            }
+            if(!checktran) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "Trận đấu này đã tồn tại");
+                isOK = false;
             }
         } else {
             JOptionPane.showMessageDialog(rootPane,
@@ -261,9 +267,14 @@ public class EditKQTDFrm extends javax.swing.JDialog {
         
         if (cbCLB1.getSelectedIndex() >= 0) {
             tendoi1 = cbCLB1.getSelectedItem().toString();
-            for(CLB clb : ClbList) {
+            for(CLB clb : CLBLst) {
                 if(clb.getTendoi().equals(tendoi1)) {
                     madoi1 = clb.getMadoi();
+                    if(!KQTDcontroller.checkCLB(madoi1, matran)) {
+                        JOptionPane.showMessageDialog(rootPane,
+                            "Đã có kết quả của đội 1 trong cùng vòng đấu");
+                        isOK = false;
+                    }
                 }
             }
         } else {
@@ -274,14 +285,24 @@ public class EditKQTDFrm extends javax.swing.JDialog {
         
        if (cbCLB2.getSelectedIndex() >= 0) {
             tendoi2 = cbCLB2.getSelectedItem().toString();
-            for(CLB clb : ClbList) {
-                if(clb.getTendoi().equals(tendoi2)) {
+            for(CLB clb : CLBLst) {
+                if(clb.getTendoi().equals(tendoi2) && !tendoi2.equals(tendoi1)) {
                     madoi2 = clb.getMadoi();
+                    checkdoi = true;
                 }
+            }
+            if(!checkdoi) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "2 đội phải khác nhau");
+                isOK = false;
+            } else if(!KQTDcontroller.checkCLB(madoi2, matran)) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "Đã có kết quả của đội 2 trong cùng vòng đấu");
+                isOK = false;
             }
         } else {
             JOptionPane.showMessageDialog(rootPane,
-                    "Bạn chưa chọn CLB");
+                    "Bạn chưa chọn CLB 2");
             isOK = false;
         }
         
@@ -295,9 +316,11 @@ public class EditKQTDFrm extends javax.swing.JDialog {
 
         if (jtfThoiGian.getText().length() > 0 && jtfThoiGian.getText() != null) {
             try {
-                thoigian = new SimpleDateFormat("yyyy-MM-dd").parse(jtfThoiGian.getText());
-            } catch (ParseException ex) {
-                Logger.getLogger(EditKQTDFrm.class.getName()).log(Level.SEVERE, null, ex);
+                thoigian = new SimpleDateFormat("dd/MM/yyyy").parse(jtfThoiGian.getText());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "Bạn nhập sai định dạng, thời gian thi đấu phải có định dạng dd/MM/yyyy");
+                isOK = false;
             }
         } else {
             JOptionPane.showMessageDialog(rootPane,
@@ -306,7 +329,13 @@ public class EditKQTDFrm extends javax.swing.JDialog {
         }
 
         if (jtfBanThang1.getText().length() > 0 && jtfBanThang1.getText() != null) {
-            banthang1 = Integer.parseInt(jtfBanThang1.getText());
+            try {
+                banthang1 = Integer.parseInt(jtfBanThang1.getText());
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(rootPane,
+                "Số bàn thắng của CLB 1 phải là số không thể chứa kí tự khác");
+                isOK = false;
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane,
                     "Bạn chưa nhập số bàn thắng của CLB 1");
@@ -314,7 +343,13 @@ public class EditKQTDFrm extends javax.swing.JDialog {
         }
         
         if (jtfBanThang2.getText().length() > 0 && jtfBanThang2.getText() != null) {
-            banthang2 = Integer.parseInt(jtfBanThang2.getText());
+            try {
+                banthang2 = Integer.parseInt(jtfBanThang2.getText());
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(rootPane,
+                "Số bàn thắng của CLB 2 phải là số không thể chứa kí tự khác");
+                isOK = false;
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane,
                     "Bạn chưa nhập số bàn thắng của CLB 2");
@@ -322,12 +357,12 @@ public class EditKQTDFrm extends javax.swing.JDialog {
         }
 
         if (isOK) {
-            KQTD kqtd = new KQTD(matran, matrancu, madoi1, madoi2, banthang1, banthang2, SVD, thoigian);
+            KQTD kqtd = new KQTD(makqtd, matran, madoi1, madoi2, banthang1, banthang2, SVD, thoigian);
            
             KQTDcontroller.update(kqtd);
             
             JOptionPane.showMessageDialog(rootPane,
-                    "Bạn đã cập nhật thành công trận đấu");
+                    "Bạn đã cập nhật thành công kết quả trận đấu");
             
             this.dispose();
         }
@@ -423,38 +458,38 @@ public class EditKQTDFrm extends javax.swing.JDialog {
         showConbo1Data();
         showConbo2Data();
         ShowComboTDData();
-        matrancu = kqtd.getMatran();
+        makqtd = kqtd.getMakqtd();
         cbTranDau.setSelectedItem(kqtd.getTentran());
         cbCLB1.setSelectedItem(kqtd.getTendoi1());
         cbCLB2.setSelectedItem(kqtd.getTendoi2());
         jtfSVD.setText(kqtd.getSVD());
-        jtfThoiGian.setText(kqtd.getThoigianthidau().toString());
+        jtfThoiGian.setText(new SimpleDateFormat("dd/MM/yyyy").format(kqtd.getThoigianthidau()));
         jtfBanThang1.setText(String.valueOf(kqtd.getSobanthang1()));
         jtfBanThang2.setText(String.valueOf(kqtd.getSobanthang2()));
     }
     
     
     public void showConbo1Data() {
-        ClbList = ClLBController.findAll();
+        List<CLB> CLBLst = ClLBController.findAll();
         cbCLB1.removeAllItems();
-        ClbList.forEach(clb -> {
+        CLBLst.forEach(clb -> {
             cbCLB1.addItem(clb.getTendoi());
         });
     }
     
     public void showConbo2Data() {
-        ClbList = ClLBController.findAll();
+        List<CLB> CLBLst = ClLBController.findAll();
         cbCLB2.removeAllItems();
-        ClbList.forEach(clb -> {
+        CLBLst.forEach(clb -> {
             cbCLB2.addItem(clb.getTendoi());
         });
     }
     
     private void ShowComboTDData() {
-        KQTDList = KQTDcontroller.findAllTD();
+        List<TD> TDList = TDController.findAllTD();
         cbTranDau.removeAllItems();
-        KQTDList.forEach(kqtd -> {
-            cbTranDau.addItem(kqtd.getTentran());
+        TDList.forEach(td -> {
+            cbTranDau.addItem(String.valueOf(td.getTentran()));
         });
     }
 }

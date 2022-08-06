@@ -11,12 +11,9 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -42,6 +39,7 @@ public class EditCauThuFrm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle("Cập nhật cầu thủ");
     }
 
     /**
@@ -85,7 +83,7 @@ public class EditCauThuFrm extends javax.swing.JDialog {
         jlbTenCauThu.setText("Tên cầu thủ:");
 
         jlbNgaySinh.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jlbNgaySinh.setText("Date (YYYY/MM/DD):");
+        jlbNgaySinh.setText("Date (DD/MM/YYYY):");
 
         jlbSoAo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jlbSoAo.setText("Số áo:");
@@ -286,9 +284,11 @@ public class EditCauThuFrm extends javax.swing.JDialog {
 
         if (jtfNgaySinh.getText().length() > 0 && jtfNgaySinh.getText() != null) {
             try {
-                ngaysinh = new SimpleDateFormat("yyyy-MM-dd").parse(jtfNgaySinh.getText());
-            } catch (ParseException ex) {
-                Logger.getLogger(EditCauThuFrm.class.getName()).log(Level.SEVERE, null, ex);
+                ngaysinh = new SimpleDateFormat("dd/MM/yyyy").parse(jtfNgaySinh.getText());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "Bạn nhập sai định dạng, ngày sinh phải có định dạng dd/MM/yyyy");
+                isOK = false;
             }
         } else {
             JOptionPane.showMessageDialog(rootPane,
@@ -297,7 +297,13 @@ public class EditCauThuFrm extends javax.swing.JDialog {
         }
 
         if (jtfSoao.getText().length() > 0 && jtfSoao.getText() != null) {
-            soao = Integer.parseInt(jtfSoao.getText());
+            try {
+                soao = Integer.parseInt(jtfSoao.getText());
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "Số áo phải là số không thể chứa kí tự khác");
+                isOK = false;
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane,
                     "Bạn chưa nhập số áo");
@@ -426,7 +432,7 @@ public class EditCauThuFrm extends javax.swing.JDialog {
         macauthu = cauThu.getMacauthu();
         cbTenDoi.setSelectedItem(cauThu.getTendoi());
         jtfTenCauThu.setText(cauThu.getTencauthu());
-        jtfNgaySinh.setText(cauThu.getNgaysinh().toString());
+        jtfNgaySinh.setText(new SimpleDateFormat("dd/MM/yyyy").format(cauThu.getNgaysinh()));
         jtfSoao.setText(String.valueOf(cauThu.getSoao()));
         jtfViTri.setText(cauThu.getVitri());
         jtfImage.setText(cauThu.getLinkImage());

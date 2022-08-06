@@ -9,16 +9,15 @@ import controller.BXHController;
 import controller.CauThuConTroller;
 import controller.ClLBController;
 import controller.KQTDcontroller;
+import controller.TDController;
+import controller.VDController;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -28,6 +27,8 @@ import model.BXH;
 import model.CLB;
 import model.CauThu;
 import model.KQTD;
+import model.TD;
+import model.VD;
 
 /**
  *
@@ -103,7 +104,7 @@ public class HomeFrm extends javax.swing.JFrame {
 
         CauthuList.forEach(cauthu -> {
             tableCauThuModel.addRow(new Object[]{tableCauThuModel.getRowCount() + 1, cauthu.getTendoi(),
-                cauthu.getTencauthu(), cauthu.getNgaysinh(), cauthu.getSoao(), 
+                cauthu.getTencauthu(), new SimpleDateFormat("dd/MM/yyyy").format(cauthu.getNgaysinh()), cauthu.getSoao(), 
                 cauthu.getVitri(), cauthu.getLinkImage()});
         });
     }
@@ -117,7 +118,8 @@ public class HomeFrm extends javax.swing.JFrame {
         KQTDList.forEach(kqtd -> {
             tableKQTDModel.addRow(new Object[]{tableKQTDModel.getRowCount() + 1, kqtd.getTenvong(),
                 kqtd.getTentran(), kqtd.getTendoi1(), kqtd.getTendoi2(), kqtd.getSVD(),
-                kqtd.getThoigianthidau(), kqtd.getSobanthang1(), kqtd.getSobanthang2()});
+                new SimpleDateFormat("dd/MM/yyyy").format(kqtd.getThoigianthidau()), 
+                kqtd.getSobanthang1(), kqtd.getSobanthang2()});
         });
     }
     
@@ -233,7 +235,7 @@ public class HomeFrm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTabbedPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "HỆ THỐNG QUẢN LÝ GIẢI ĐẤU NGOẠI HẠNG ANH", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 18))); // NOI18N
+        jTabbedPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "HỆ THỐNG QUẢN LÝ KẾT QUẢ GIẢI ĐẤU NGOẠI HẠNG ANH", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 18))); // NOI18N
         jTabbedPane1.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
 
         jPanel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -745,10 +747,20 @@ public class HomeFrm extends javax.swing.JFrame {
         jlbCLB2.setText("Tên CLB 2");
 
         cbCLB2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cbCLB2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCLB2ActionPerformed(evt);
+            }
+        });
 
         cbCLB1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jtfSobanthang1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jtfSobanthang1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfSobanthang1ActionPerformed(evt);
+            }
+        });
 
         jtfSobanthang2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jtfSobanthang2.addActionListener(new java.awt.event.ActionListener() {
@@ -760,6 +772,12 @@ public class HomeFrm extends javax.swing.JFrame {
         jtfSVD.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfSVDActionPerformed(evt);
+            }
+        });
+
+        jtfThoiGianThiDau.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfThoiGianThiDauActionPerformed(evt);
             }
         });
 
@@ -798,8 +816,8 @@ public class HomeFrm extends javax.swing.JFrame {
                         .addGap(66, 66, 66)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(cbVD_KQTD, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(203, 203, 203)
+                        .addComponent(cbVD_KQTD, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(200, 200, 200)
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
@@ -837,7 +855,7 @@ public class HomeFrm extends javax.swing.JFrame {
                                 .addComponent(jlbVongFind, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jtfVongFind, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(605, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1080,16 +1098,18 @@ public class HomeFrm extends javax.swing.JFrame {
         String tendoi = jtfBXHFind.getText();
         if (tendoi.length() > 0 && tendoi != null) {
             BXHList = BXHController.findByNameCLB(tendoi);
-            tableBXHModel.setRowCount(0);
-
-            BXHList.forEach(bxh -> {
-                tableBXHModel.addRow(new Object[]{bxh.getTenvong(), bxh.getVitri(), bxh.getTendoi(),
-                    bxh.getSotran(), bxh.getSotrangthang(), bxh.getSobanthua(),
-                    bxh.getSotranhoa(), bxh.getSobanthang(), bxh.getSobanthua(), bxh.getHieuso(), bxh.getDiem()});
-        });
-        jtfBXHFind.setText("");
-        } else {
-            ShowBXH();
+            if(BXHList.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane,
+                        "Không tìm thấy đội bóng bạn đang tìm kiếm");
+            } else {
+                tableBXHModel.setRowCount(0);
+                BXHList.forEach(bxh -> {
+                    tableBXHModel.addRow(new Object[]{bxh.getTenvong(), bxh.getVitri(), bxh.getTendoi(),
+                        bxh.getSotran(), bxh.getSotrangthang(), bxh.getSobanthua(),
+                        bxh.getSotranhoa(), bxh.getSobanthang(), bxh.getSobanthua(), bxh.getHieuso(), bxh.getDiem()});
+                });
+            }
+            jtfBXHFind.setText("");
         }
     }//GEN-LAST:event_jtfBXHFindActionPerformed
 
@@ -1109,7 +1129,7 @@ public class HomeFrm extends javax.swing.JFrame {
             int option = JOptionPane.showConfirmDialog(rootPane,
                 "Bạn có chắc chắn muốn xóa không?");
             if (option == 0) {
-                KQTDcontroller.delete(kqtd.getMatran());
+                KQTDcontroller.delete(kqtd.getMakqtd());
                 JOptionPane.showMessageDialog(rootPane,
                     "Bạn đã xóa thành công");
 
@@ -1127,9 +1147,9 @@ public class HomeFrm extends javax.swing.JFrame {
     private void btnEditTranDauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditTranDauActionPerformed
         // TODO add your handling code here:
         int selectedIndex = jtbKQTranDau.getSelectedRow();
+                
         if (selectedIndex >= 0) {
             KQTD kqtd = KQTDList.get(selectedIndex);
-
             editKQTDFrm = new EditKQTDFrm(this, rootPaneCheckingEnabled);
             editKQTDFrm.editKQTDData(kqtd);
             editKQTDFrm.setVisible(true);
@@ -1144,19 +1164,27 @@ public class HomeFrm extends javax.swing.JFrame {
 
     private void btnSaveTranDauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveTranDauActionPerformed
         // TODO add your handling code here:
-        ClbList = ClLBController.findAll();
-        KQTDList = KQTDcontroller.findAllTD();
+        List<CLB> CLBLst = ClLBController.findAll();
+        List<TD> TDList = TDController.findAllTD();
         boolean isOK = true;
-        int matran = 0, madoi1 = 0, madoi2 = 0, banthang1 = 0, banthang2 = 0;
+        boolean checkdoi = false;
+        boolean checktran = false;
+        int matran = 0, tentran = 0, madoi1 = 0, madoi2 = 0, banthang1 = 0, banthang2 = 0;
         Date thoigian = null;
-        String tentran = null, tendoi1 = null, tendoi2 = null, SVD = null;
+        String tendoi1 = null, tendoi2 = null, SVD = null;
 
         if (cbTranDau.getSelectedIndex() >= 0) {
-            tentran = cbTranDau.getSelectedItem().toString();
-            for (KQTD kqtd : KQTDList) {
-                if (kqtd.getTentran().equals(tentran)) {
-                    matran = kqtd.getMatran();
+            tentran = Integer.valueOf(cbTranDau.getSelectedItem().toString());
+            for (TD td : TDList) {
+                if (td.getTentran() == tentran && KQTDcontroller.checkTentran(tentran)) {
+                    matran = td.getMatran();
+                    checktran = true;
                 }
+            }
+            if(!checktran) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "Trận đấu này đã tồn tại");
+                isOK = false;
             }
         } else {
             JOptionPane.showMessageDialog(rootPane,
@@ -1166,9 +1194,14 @@ public class HomeFrm extends javax.swing.JFrame {
 
         if (cbCLB1.getSelectedIndex() >= 0) {
             tendoi1 = cbCLB1.getSelectedItem().toString();
-            for (CLB clb : ClbList) {
+            for (CLB clb : CLBLst) {
                 if (clb.getTendoi().equals(tendoi1)) {
                     madoi1 = clb.getMadoi();
+                    if(!KQTDcontroller.checkCLB(madoi1, matran)) {
+                        JOptionPane.showMessageDialog(rootPane,
+                            "Đã có kết quả của đội 1 trong cùng vòng đấu");
+                        isOK = false;
+                    }
                 }
             }
         } else {
@@ -1179,14 +1212,24 @@ public class HomeFrm extends javax.swing.JFrame {
 
         if (cbCLB2.getSelectedIndex() >= 0) {
             tendoi2 = cbCLB2.getSelectedItem().toString();
-            for (CLB clb : ClbList) {
-                if (clb.getTendoi().equals(tendoi2)) {
+            for (CLB clb : CLBLst) {
+                if (clb.getTendoi().equals(tendoi2) && !tendoi2.equals(tendoi1)) {
                     madoi2 = clb.getMadoi();
-                }
+                    checkdoi = true;
+                } 
+            }
+            if(!checkdoi) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "2 đội phải khác nhau");
+                isOK = false;
+            } else if(!KQTDcontroller.checkCLB(madoi2, matran)) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "Đã có kết quả của đội 2 trong cùng vòng đấu");
+                isOK = false;
             }
         } else {
             JOptionPane.showMessageDialog(rootPane,
-                "Bạn chưa chọn CLB");
+                "Bạn chưa chọn CLB 2");
             isOK = false;
         }
 
@@ -1202,8 +1245,10 @@ public class HomeFrm extends javax.swing.JFrame {
             try {
                 System.out.println(jtfThoiGianThiDau.getText());
                 thoigian = new SimpleDateFormat("dd/MM/yyyy").parse(jtfThoiGianThiDau.getText());
-            } catch (ParseException ex) {
-                Logger.getLogger(HomeFrm.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "Bạn nhập sai định dạng, thời gian thi đấu phải có định dạng dd/MM/yyyy");
+                isOK = false;
             }
         } else {
             JOptionPane.showMessageDialog(rootPane,
@@ -1212,7 +1257,13 @@ public class HomeFrm extends javax.swing.JFrame {
         }
 
         if (jtfSobanthang1.getText().length() > 0 && jtfSobanthang1.getText() != null) {
-            banthang1 = Integer.parseInt(jtfSobanthang1.getText());
+            try {
+                banthang1 = Integer.parseInt(jtfSobanthang1.getText());
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(rootPane,
+                "Số bàn thắng của CLB 1 phải là số không thể chứa kí tự khác");
+                isOK = false;
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane,
                 "Bạn chưa nhập số bàn thắng của CLB 1");
@@ -1220,7 +1271,13 @@ public class HomeFrm extends javax.swing.JFrame {
         }
 
         if (jtfSobanthang2.getText().length() > 0 && jtfSobanthang2.getText() != null) {
-            banthang2 = Integer.parseInt(jtfSobanthang2.getText());
+            try {
+                banthang2 = Integer.parseInt(jtfSobanthang2.getText());
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(rootPane,
+                "Số bàn thắng của CLB 2 phải là số không thể chứa kí tự khác");
+                isOK = false;
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane,
                 "Bạn chưa nhập số bàn thắng của CLB 2");
@@ -1233,8 +1290,12 @@ public class HomeFrm extends javax.swing.JFrame {
             KQTDcontroller.insert(kqtd);
 
             JOptionPane.showMessageDialog(rootPane,
-                "Bạn đã thêm thành công trận đấu");
+                "Bạn đã thêm thành công kết quả trận đấu");
 
+            ShowKQTD();
+            BXHController.Delete();
+            ShowBXH();
+            
             cbTranDau.setSelectedIndex(0);
             cbCLB1.setSelectedIndex(0);
             cbCLB2.setSelectedIndex(0);
@@ -1243,10 +1304,6 @@ public class HomeFrm extends javax.swing.JFrame {
             jtfSobanthang1.setText("");
             jtfSobanthang2.setText("");
         }
-
-        ShowKQTD();
-        BXHController.Delete();
-        ShowBXH();
     }//GEN-LAST:event_btnSaveTranDauActionPerformed
 
     private void jtfVongFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfVongFindActionPerformed
@@ -1254,17 +1311,20 @@ public class HomeFrm extends javax.swing.JFrame {
         String tendoi = jtfVongFind.getText();
         if (tendoi.length() > 0 && tendoi != null) {
             KQTDList = KQTDcontroller.findByTenDoi(tendoi);
-            tableKQTDModel.setRowCount(0);
-
-            KQTDList.forEach(kqtd -> {
-                tableKQTDModel.addRow(new Object[]{tableKQTDModel.getRowCount() + 1, kqtd.getTenvong(),
-                    kqtd.getTentran(), kqtd.getTendoi1(), kqtd.getTendoi2(), kqtd.getSVD(),
-                    kqtd.getThoigianthidau(), kqtd.getSobanthang1(), kqtd.getSobanthang2()});
-        });
-        jtfVongFind.setText("");
-        } else {
-            ShowKQTD();
-        }
+            if(KQTDList.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane,
+                "Không tìm thấy đội bóng bạn đang tìm kiếm");
+            } else {
+                tableKQTDModel.setRowCount(0);
+                KQTDList.forEach(kqtd -> {
+                    tableKQTDModel.addRow(new Object[]{tableKQTDModel.getRowCount() + 1, kqtd.getTenvong(),
+                        kqtd.getTentran(), kqtd.getTendoi1(), kqtd.getTendoi2(), kqtd.getSVD(),
+                        new SimpleDateFormat("dd/MM/yyyy").format(kqtd.getThoigianthidau()), 
+                        kqtd.getSobanthang1(), kqtd.getSobanthang2()});
+                });
+            }
+            jtfVongFind.setText("");
+        } 
     }//GEN-LAST:event_jtfVongFindActionPerformed
 
     private void cbTenCLBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTenCLBActionPerformed
@@ -1310,7 +1370,7 @@ public class HomeFrm extends javax.swing.JFrame {
 
     private void btnSaveCauThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveCauThuActionPerformed
         // TODO add your handling code here:
-        ClbList = ClLBController.findAll();
+//        ClbList = ClLBController.findAll();
         boolean isOK = true;
         int soao = 0, madoi = 0;
         Date ngaysinh = null;
@@ -1341,8 +1401,10 @@ public class HomeFrm extends javax.swing.JFrame {
             try {
                 System.out.println(jtfNgaySinh.getText());
                 ngaysinh = new SimpleDateFormat("dd/MM/yyyy").parse(jtfNgaySinh.getText());
-            } catch (ParseException ex) {
-                Logger.getLogger(HomeFrm.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(rootPane,
+                    "Bạn nhập sai định dạng, ngày sinh phải có định dạng dd/MM/yyyy");
+                isOK = false;
             }
         } else {
             JOptionPane.showMessageDialog(rootPane,
@@ -1351,7 +1413,13 @@ public class HomeFrm extends javax.swing.JFrame {
         }
 
         if (jtfSoAo.getText().length() > 0 && jtfSoAo.getText() != null) {
-            soao = Integer.parseInt(jtfSoAo.getText());
+            try {
+               soao = Integer.parseInt(jtfSoAo.getText()); 
+            } catch(Exception ex) {
+                JOptionPane.showMessageDialog(rootPane,
+                "Số áo phải là số không thể chứa kí tự khác");
+                isOK = false;
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane,
                 "Bạn chưa nhập số áo");
@@ -1405,16 +1473,18 @@ public class HomeFrm extends javax.swing.JFrame {
         String tencauthu = jtfCauThuFind.getText();
         if (tencauthu.length() > 0 && tencauthu != null) {
             CauthuList = CauThuConTroller.findByNameCauthu(tencauthu);
-            tableCauThuModel.setRowCount(0);
-
-            CauthuList.forEach(cauthu -> {
-                tableCauThuModel.addRow(new Object[]{tableCauThuModel.getRowCount() + 1, cauthu.getTendoi(),
-                    cauthu.getTencauthu(), cauthu.getNgaysinh(), cauthu.getSoao(), 
-                    cauthu.getVitri(), cauthu.getLinkImage()});
-            });
-        jtfCauThuFind.setText("");
-        } else {
-            ShowCauThu();
+            if(CauthuList.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane,
+                        "Không tìm thấy cầu thủ bạn đang tìm kiếm");
+            } else {
+                tableCauThuModel.setRowCount(0);
+                CauthuList.forEach(cauthu -> {
+                    tableCauThuModel.addRow(new Object[]{tableCauThuModel.getRowCount() + 1, cauthu.getTendoi(),
+                        cauthu.getTencauthu(), new SimpleDateFormat("dd/MM/yyyy").format(cauthu.getNgaysinh()), cauthu.getSoao(), 
+                        cauthu.getVitri(), cauthu.getLinkImage()});
+                });
+            }
+            jtfCauThuFind.setText("");
         }
     }//GEN-LAST:event_jtfCauThuFindActionPerformed
 
@@ -1567,31 +1637,35 @@ public class HomeFrm extends javax.swing.JFrame {
         String tendoi = jtfFindCLB.getText();
         if (tendoi.length() != 0 && tendoi != null) {
             ClbList = ClLBController.findByNameCLB(tendoi);
-            tableCLBModel.setRowCount(0);
+            if(ClbList.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane,
+                        "Không tìm thấy câu lạc bộ bạn đang tìm kiếm");
+            } else {
+                tableCLBModel.setRowCount(0);
+                ClbList.forEach(clb -> {
+                    tableCLBModel.addRow(new Object[]{tableCLBModel.getRowCount() + 1, clb.getTendoi(),
+                        clb.getDoitruong(), clb.getHLV(), clb.getSocauthu(), clb.getLinkImage()});
+                });
+            }
 
-            ClbList.forEach(clb -> {
-                tableCLBModel.addRow(new Object[]{tableCLBModel.getRowCount() + 1, clb.getTendoi(),
-                    clb.getDoitruong(), clb.getHLV(), clb.getSocauthu(), clb.getLinkImage()});
-            });
-
-        jtfFindCLB.setText("");
-        } else {
-            ShowCLB();
-        }
+            jtfFindCLB.setText("");
+        } 
     }//GEN-LAST:event_jtfFindCLBActionPerformed
 
     private void cbVongDau_BXHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbVongDau_BXHActionPerformed
         // TODO add your handling code here:
-        BXHList = BXHController.findByVD(Integer.parseInt(cbVongDau_BXH.getSelectedItem().toString()));
+        if(cbVongDau_BXH.getSelectedIndex() >= 0) {
+            BXHList = BXHController.findByVD(Integer.parseInt(cbVongDau_BXH.getSelectedItem().toString()));
         
-        // Đưa số Row của table về 0
-        tableBXHModel.setRowCount(0);
+            // Đưa số Row của table về 0
+            tableBXHModel.setRowCount(0);
 
-        BXHList.forEach(bxh -> {
-            tableBXHModel.addRow(new Object[]{bxh.getTenvong(), bxh.getVitri(), bxh.getTendoi(),
-                bxh.getSotran(), bxh.getSotrangthang(), bxh.getSotranthua(), 
-                bxh.getSotranhoa(), bxh.getSobanthang(), bxh.getSobanthua(), bxh.getHieuso(), bxh.getDiem()});
-        });
+            BXHList.forEach(bxh -> {
+                tableBXHModel.addRow(new Object[]{bxh.getTenvong(), bxh.getVitri(), bxh.getTendoi(),
+                    bxh.getSotran(), bxh.getSotrangthang(), bxh.getSotranthua(), 
+                    bxh.getSotranhoa(), bxh.getSobanthang(), bxh.getSobanthua(), bxh.getHieuso(), bxh.getDiem()});
+            });
+        }
     }//GEN-LAST:event_cbVongDau_BXHActionPerformed
 
     private void btnResetCLBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetCLBActionPerformed
@@ -1611,17 +1685,18 @@ public class HomeFrm extends javax.swing.JFrame {
 
     private void cbVD_KQTDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbVD_KQTDActionPerformed
         // TODO add your handling code here:
-        int tenvong = Integer.parseInt(cbVD_KQTD.getSelectedItem().toString());
-        KQTDList = KQTDcontroller.findByNamevongKQTD(tenvong);
-
-        // Đưa số Row của table về 0
-        tableKQTDModel.setRowCount(0);
-
-        KQTDList.forEach(kqtd -> {
-            tableKQTDModel.addRow(new Object[]{tableKQTDModel.getRowCount() + 1, kqtd.getTenvong(),
-                kqtd.getTentran(), kqtd.getTendoi1(), kqtd.getTendoi2(), kqtd.getSVD(),
-                kqtd.getThoigianthidau(), kqtd.getSobanthang1(), kqtd.getSobanthang2()});
-        });
+        if(cbVD_KQTD.getSelectedIndex() >= 0) {
+            int tenvong = Integer.parseInt(cbVD_KQTD.getSelectedItem().toString());
+            KQTDList = KQTDcontroller.findByNamevongKQTD(tenvong);
+            // Đưa số Row của table về 0
+            tableKQTDModel.setRowCount(0);
+            KQTDList.forEach(kqtd -> {
+                tableKQTDModel.addRow(new Object[]{tableKQTDModel.getRowCount() + 1, kqtd.getTenvong(),
+                    kqtd.getTentran(), kqtd.getTendoi1(), kqtd.getTendoi2(), kqtd.getSVD(),
+                    new SimpleDateFormat("dd/MM/yyyy").format(kqtd.getThoigianthidau()),
+                    kqtd.getSobanthang1(), kqtd.getSobanthang2()});
+            });
+        }
     }//GEN-LAST:event_cbVD_KQTDActionPerformed
 
     private void btnShowListMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowListMemberActionPerformed
@@ -1687,6 +1762,18 @@ public class HomeFrm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnImagePlayerActionPerformed
 
+    private void jtfSobanthang1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfSobanthang1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfSobanthang1ActionPerformed
+
+    private void jtfThoiGianThiDauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfThoiGianThiDauActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfThoiGianThiDauActionPerformed
+
+    private void cbCLB2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCLB2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbCLB2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1720,6 +1807,7 @@ public class HomeFrm extends javax.swing.JFrame {
                 new HomeFrm().setVisible(true);
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1812,50 +1900,50 @@ public class HomeFrm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void showConboCLBData() {
-        ClbList = ClLBController.findAll();
+        List<CLB> CLBLst = ClLBController.findAll();
         cbTenCLB.removeAllItems();
-        ClbList.forEach(clb -> {
+        CLBLst.forEach(clb -> {
             cbTenCLB.addItem(clb.getTendoi());
         });
     }
     
     private void showConboCLB1Data() {
-        ClbList = ClLBController.findAll();
+        List<CLB> CLBLst = ClLBController.findAll();
         cbCLB1.removeAllItems();
-        ClbList.forEach(clb -> {
+        CLBLst.forEach(clb -> {
             cbCLB1.addItem(clb.getTendoi());
         });
     }
 
     private void showConboCLB2Data() {
-        ClbList = ClLBController.findAll();
+        List<CLB> CLBLst = ClLBController.findAll();
         cbCLB2.removeAllItems();
-        ClbList.forEach(clb -> {
+        CLBLst.forEach(clb -> {
             cbCLB2.addItem(clb.getTendoi());
         });
     }
 
     private void ShowComboTDData() {
-        KQTDList = KQTDcontroller.findAllTD();
+        List<TD> TDList = TDController.findAllTD();
         cbTranDau.removeAllItems();
-        KQTDList.forEach(kqtd -> {
-            cbTranDau.addItem(kqtd.getTentran());
+        TDList.forEach(td -> {
+            cbTranDau.addItem(String.valueOf(td.getTentran()));
         });
     }
     
     private void ShowComboVD_KQTDData() {
-        KQTDList = KQTDcontroller.findAllVD();
+        List<VD> VDList = VDController.findAllVD();
         cbVD_KQTD.removeAllItems();
-        KQTDList.forEach(kqtd -> {
-            cbVD_KQTD.addItem(kqtd.getTenvong());
+        VDList.forEach(vd -> {
+            cbVD_KQTD.addItem(String.valueOf(vd.getTenvong()));
         });
     }
     
     private void ShowComboVD_BXHData() {
-        KQTDList = KQTDcontroller.findAllVD();
+        List<VD> VDList = VDController.findAllVD();
         cbVongDau_BXH.removeAllItems();
-        KQTDList.forEach(kqtd -> {
-            cbVongDau_BXH.addItem(kqtd.getTenvong());
+        VDList.forEach(vd -> {
+            cbVongDau_BXH.addItem(String.valueOf(vd.getTenvong()));
         });
     }
 

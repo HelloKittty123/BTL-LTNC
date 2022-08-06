@@ -6,6 +6,7 @@
 package view;
 
 import controller.CauThuConTroller;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -32,6 +33,7 @@ public class ListCauThuFrm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle("Danh sách cầu thủ");
         
         tableCauThuListModel = (DefaultTableModel) jtbCauThuList.getModel();
         
@@ -172,7 +174,8 @@ public class ListCauThuFrm extends javax.swing.JDialog {
 
         CauthuList.forEach(cauthu -> {
             tableCauThuListModel.addRow(new Object[]{tableCauThuListModel.getRowCount() + 1, cauthu.getTendoi(),
-                cauthu.getTencauthu(), cauthu.getNgaysinh(), cauthu.getSoao(), cauthu.getVitri()});
+                cauthu.getTencauthu(), new SimpleDateFormat("dd/MM/yyyy").format(cauthu.getNgaysinh()), 
+                cauthu.getSoao(), cauthu.getVitri()});
         });
     }
 }

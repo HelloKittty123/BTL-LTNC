@@ -33,7 +33,6 @@ public class BXHController {
             sotran = 0, sotranthang = 0, sotranthua = 0, sotranhoa = 0, diem = 0, hieuso = 0;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
@@ -308,7 +307,6 @@ public class BXHController {
         PreparedStatement statement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
@@ -346,7 +344,6 @@ public class BXHController {
         PreparedStatement prestatement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
@@ -413,7 +410,6 @@ public class BXHController {
         PreparedStatement prestatement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query

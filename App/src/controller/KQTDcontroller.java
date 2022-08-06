@@ -31,7 +31,6 @@ public class KQTDcontroller {
         PreparedStatement prestatement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
@@ -43,7 +42,7 @@ public class KQTDcontroller {
                     + "CLB1.madoi madoi1, "
                     + "CLB2.tendoi tendoi2, "
                     + "CLB1.madoi madoi2, "
-                    + "KQ.SVD, KQ.thoigian, "
+                    + "KQ.makqtd, KQ.SVD, KQ.thoigian, "
                     + "KQ.banthang1, KQ.banthang2 "
                     + "FROM kqtd KQ JOIN trandau TD "
                     + "ON KQ.matran = TD.matran "
@@ -59,7 +58,8 @@ public class KQTDcontroller {
 
             while (resultSet.next()) {
                 KQTD kqtd;
-                kqtd = new KQTD(resultSet.getInt("mavongdau"),
+                kqtd = new KQTD(resultSet.getInt("makqtd"),
+                        resultSet.getInt("mavongdau"),
                         resultSet.getInt("matran"),
                         resultSet.getInt("madoi1"),
                         resultSet.getInt("madoi2"),
@@ -98,105 +98,11 @@ public class KQTDcontroller {
         return KQTDList;
     }
 
-    public static List<KQTD> findAllTD() {
-        List<KQTD> KQTDList = new ArrayList<>();
-
-        Connection connection = null;
-        Statement statement = null;
-        PreparedStatement prestatement = null;
-
-        try {
-            //Lấy tất cả dah sách sinh viên
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
-
-            //query
-            String sql = "SELECT matran, tentran FROM trandau";
-            statement = connection.createStatement();
-
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            while (resultSet.next()) {
-                KQTD kqtd;
-                kqtd = new KQTD(resultSet.getInt("matran"),
-                        resultSet.getString("tentran"));
-                KQTDList.add(kqtd);
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        // Kết thúc
-        return KQTDList;
-    }
-    
-    public static List<KQTD> findAllVD() {
-        List<KQTD> KQTDList = new ArrayList<>();
-
-        Connection connection = null;
-        Statement statement = null;
-        PreparedStatement prestatement = null;
-
-        try {
-            //Lấy tất cả dah sách sinh viên
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
-
-            //query
-            String sql = "SELECT mavongdau, tenvongdau FROM vongdau";
-            statement = connection.createStatement();
-
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            while (resultSet.next()) {
-                KQTD kqtd;
-                kqtd = new KQTD(resultSet.getString("tenvongdau"));
-                KQTDList.add(kqtd);
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        // Kết thúc
-        return KQTDList;
-    }
-
     public static void insert(KQTD kqtd) {
         Connection connection = null;
         PreparedStatement statement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
@@ -241,7 +147,6 @@ public class KQTDcontroller {
         PreparedStatement statement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
@@ -252,7 +157,7 @@ public class KQTDcontroller {
                     + "thoigian = ?, "
                     + "banthang1 = ?, "
                     + "banthang2 = ? "
-                    + "WHERE matran = ?";
+                    + "WHERE makqtd = ?";
             statement = connection.prepareCall(sql);
             statement.setInt(1, kqtd.getMatran());
             statement.setInt(2, kqtd.getMadoi1());
@@ -261,18 +166,18 @@ public class KQTDcontroller {
             statement.setDate(5, new java.sql.Date(kqtd.getThoigianthidau().getTime()));
             statement.setInt(6, kqtd.getSobanthang1());
             statement.setInt(7, kqtd.getSobanthang2());
-            statement.setInt(8, kqtd.getMatrancu());
+            statement.setInt(8, kqtd.getMakqtd());
 
             statement.execute();
 
         } catch (SQLException ex) {
-            Logger.getLogger(CauThuConTroller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (statement != null) {
                 try {
                     statement.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CauThuConTroller.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -280,25 +185,24 @@ public class KQTDcontroller {
                 try {
                     connection.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CauThuConTroller.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
         // Kết thúc
     }
 
-    public static void delete(int matran) {
+    public static void delete(int makqtd) {
         Connection connection = null;
         PreparedStatement statement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
-            String sql = "DELETE FROM kqtd WHERE matran = ?";
+            String sql = "DELETE FROM kqtd WHERE makqtd = ?";
             statement = connection.prepareCall(sql);
-            statement.setInt(1, matran);
+            statement.setInt(1, makqtd);
 
             statement.execute();
 
@@ -331,7 +235,6 @@ public class KQTDcontroller {
         PreparedStatement statement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
@@ -343,7 +246,7 @@ public class KQTDcontroller {
                     + "CLB1.madoi madoi1, "
                     + "CLB2.tendoi tendoi2, "
                     + "CLB1.madoi madoi2, "
-                    + "KQ.SVD, KQ.thoigian, "
+                    + "KQ.makqtd, KQ.SVD, KQ.thoigian, "
                     + "KQ.banthang1, KQ.banthang2 "
                     + "FROM kqtd KQ JOIN trandau TD "
                     + "ON KQ.matran = TD.matran "
@@ -361,7 +264,8 @@ public class KQTDcontroller {
 
             while (resultSet.next()) {
                 KQTD kqtd;
-                kqtd = new KQTD(resultSet.getInt("mavongdau"),
+                kqtd = new KQTD(resultSet.getInt("makqtd"),
+                        resultSet.getInt("mavongdau"),
                         resultSet.getInt("matran"),
                         resultSet.getInt("madoi1"),
                         resultSet.getInt("madoi2"),
@@ -376,13 +280,13 @@ public class KQTDcontroller {
                 KQTDList.add(kqtd);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CauThuConTroller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (statement != null) {
                 try {
                     statement.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CauThuConTroller.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -390,7 +294,7 @@ public class KQTDcontroller {
                 try {
                     connection.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CauThuConTroller.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -405,7 +309,6 @@ public class KQTDcontroller {
         PreparedStatement statement = null;
 
         try {
-            //Lấy tất cả dah sách sinh viên
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
 
             //query
@@ -417,7 +320,7 @@ public class KQTDcontroller {
                     + "CLB1.madoi madoi1, "
                     + "CLB2.tendoi tendoi2, "
                     + "CLB2.madoi madoi2, "
-                    + "KQ.SVD, KQ.thoigian, "
+                    + "KQ.makqtd, KQ.SVD, KQ.thoigian, "
                     + "KQ.banthang1, KQ.banthang2 "
                     + "FROM kqtd KQ JOIN trandau TD "
                     + "ON KQ.matran = TD.matran "
@@ -436,7 +339,8 @@ public class KQTDcontroller {
 
             while (resultSet.next()) {
                 KQTD kqtd;
-                kqtd = new KQTD(resultSet.getInt("mavongdau"),
+                kqtd = new KQTD(resultSet.getInt("makqtd"),
+                        resultSet.getInt("mavongdau"),
                         resultSet.getInt("matran"),
                         resultSet.getInt("madoi1"),
                         resultSet.getInt("madoi2"),
@@ -451,13 +355,13 @@ public class KQTDcontroller {
                 KQTDList.add(kqtd);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CauThuConTroller.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (statement != null) {
                 try {
                     statement.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CauThuConTroller.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -465,7 +369,7 @@ public class KQTDcontroller {
                 try {
                     connection.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CauThuConTroller.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -473,4 +377,98 @@ public class KQTDcontroller {
         return KQTDList;
     }
     
+    public static boolean checkTentran(int tentran) {
+        boolean check = true;
+        Connection connection = null;
+        Statement statement = null;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
+
+            //query
+            String sql = "SELECT tentran from trandau join kqtd on kqtd.matran = trandau.matran";
+            statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                if(tentran == resultSet.getInt("tentran")) {
+                    check = false;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        // Kết thúc
+        return check;
+    }
+    
+    public static boolean checkCLB(int madoi, int matran) {
+        boolean check = true;
+        int mavong = 0;
+        Connection connection = null;
+        Statement statement = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/league_football_management", "root", "trung123Aa");
+
+            //query
+            String sql = "select mavong from trandau where matran = ?";
+            preparedStatement = connection.prepareCall(sql);
+            preparedStatement.setInt(1, matran);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()) {
+                mavong = resultSet.getInt("mavong");
+            }
+            
+            sql = "select madoi1, madoi2 from kqtd join trandau on kqtd.matran = trandau.matran "
+                        + "where trandau.mavong = ?";
+            preparedStatement = connection.prepareCall(sql);
+            preparedStatement.setInt(1, mavong);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                if(madoi == resultSet.getInt("madoi1") || madoi == resultSet.getInt("madoi2")) {
+                    check = false;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(KQTDcontroller.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        // Kết thúc
+        return check;
+    }
 }

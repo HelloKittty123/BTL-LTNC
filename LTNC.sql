@@ -47,7 +47,7 @@ CREATE TABLE `bxh` (
 
 LOCK TABLES `bxh` WRITE;
 /*!40000 ALTER TABLE `bxh` DISABLE KEYS */;
-INSERT INTO `bxh` VALUES (6,1,1,1,0,1,0,1,3,-2,0),(1,1,33,1,1,0,0,3,1,2,3),(3,1,27,1,0,0,1,2,2,0,1),(4,1,32,1,0,0,1,2,2,0,1),(5,1,31,1,0,1,0,1,2,-1,0),(2,1,37,1,1,0,0,2,1,1,3),(2,2,1,2,0,2,0,3,6,-3,0),(1,2,33,2,2,0,0,6,3,3,6),(2,3,1,3,0,3,0,6,10,-4,0),(1,3,33,3,3,0,0,10,6,4,9);
+INSERT INTO `bxh` VALUES (1,1,1,1,1,0,0,3,2,1,3),(5,1,33,1,0,1,0,2,3,-1,0),(3,1,27,1,1,0,0,2,1,1,3),(7,1,32,1,0,1,0,1,2,-1,0),(2,1,22,1,1,0,0,3,2,1,3),(6,1,37,1,0,1,0,2,3,-1,0),(8,1,29,1,0,1,0,1,2,-1,0),(4,1,31,1,1,0,0,2,1,1,3),(1,2,22,2,2,0,0,6,3,3,6),(2,2,37,2,0,2,0,3,6,-3,0);
 /*!40000 ALTER TABLE `bxh` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,6 +87,7 @@ DROP TABLE IF EXISTS `kqtd`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `kqtd` (
+  `makqtd` int NOT NULL AUTO_INCREMENT,
   `matran` int NOT NULL,
   `madoi1` int NOT NULL,
   `madoi2` int NOT NULL,
@@ -94,13 +95,14 @@ CREATE TABLE `kqtd` (
   `thoigian` date NOT NULL,
   `banthang1` int NOT NULL,
   `banthang2` int NOT NULL,
+  PRIMARY KEY (`makqtd`),
   KEY `matran` (`matran`),
   KEY `madoi1` (`madoi1`),
   KEY `madoi2` (`madoi2`),
   CONSTRAINT `kqtd_ibfk_1` FOREIGN KEY (`matran`) REFERENCES `trandau` (`matran`),
   CONSTRAINT `kqtd_ibfk_2` FOREIGN KEY (`madoi1`) REFERENCES `clb` (`madoi`),
   CONSTRAINT `kqtd_ibfk_3` FOREIGN KEY (`madoi2`) REFERENCES `clb` (`madoi`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +111,7 @@ CREATE TABLE `kqtd` (
 
 LOCK TABLES `kqtd` WRITE;
 /*!40000 ALTER TABLE `kqtd` DISABLE KEYS */;
-INSERT INTO `kqtd` VALUES (5,1,33,'Mỹ Đình','2000-12-12',1,3),(2,32,27,'Hàng Đẫy','2000-12-12',2,2),(3,31,37,'Lạch Tray','2000-12-01',1,2),(11,1,33,'12345','2021-01-01',2,3),(21,1,33,'123','2022-01-01',3,4);
+INSERT INTO `kqtd` VALUES (2,1,1,33,'ABC','2001-12-12',3,2),(3,2,32,27,'CDE','2000-11-11',1,2),(5,11,22,37,'12','2000-12-12',3,1),(10,3,22,37,'12','2000-12-12',3,2),(11,4,31,29,'12','2000-02-12',2,1);
 /*!40000 ALTER TABLE `kqtd` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -140,7 +142,7 @@ CREATE TABLE `thongtincauthu` (
 
 LOCK TABLES `thongtincauthu` WRITE;
 /*!40000 ALTER TABLE `thongtincauthu` DISABLE KEYS */;
-INSERT INTO `thongtincauthu` VALUES (26,1,'DDDA','2001-12-01',24,'Thủ môn','C:\\Users\\Dell\\Documents\\NetBeansProjects\\football_league_management_1\\src\\image\\player\\Leno.jpg'),(27,1,'AAAA','2000-12-12',12,'Tiền đạo','C:\\Users\\Dell\\Documents\\NetBeansProjects\\football_league_management_1\\src\\image\\player\\Bellerin.jpg'),(28,1,'123','2000-12-12',23,'tiền đạo','C:\\Users\\Dell\\Documents\\NetBeansProjects\\football_league_management_1\\src\\image\\player\\Ramsdale.jpg'),(30,27,'ABSDS','2000-12-12',21,'Thủ môn','C:\\Users\\Dell\\Documents\\NetBeansProjects\\football_league_management_1\\src\\image\\player\\Turner.jpg');
+INSERT INTO `thongtincauthu` VALUES (26,1,'DDDA','2001-12-01',24,'Thủ môn','C:\\Users\\Dell\\Documents\\NetBeansProjects\\football_league_management_1\\src\\image\\player\\Leno.jpg'),(27,1,'AAAA','2000-12-12',12,'Tiền đạo','C:\\Users\\Dell\\Documents\\NetBeansProjects\\football_league_management_1\\src\\image\\player\\Bellerin.jpg'),(28,1,'123','2001-12-12',23,'tiền đạo','C:\\Users\\Dell\\Documents\\NetBeansProjects\\football_league_management_1\\src\\image\\player\\Ramsdale.jpg'),(30,27,'ABSDS','2001-01-11',21,'Thủ môn','C:\\Users\\Dell\\Documents\\NetBeansProjects\\football_league_management_1\\src\\image\\player\\Turner.jpg');
 /*!40000 ALTER TABLE `thongtincauthu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -204,4 +206,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-08-01 16:02:43
+-- Dump completed on 2022-08-06 21:05:13
